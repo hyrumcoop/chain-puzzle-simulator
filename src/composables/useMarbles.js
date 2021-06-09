@@ -28,6 +28,19 @@ const SYMMETRIC_MARBLE_POSITIONS = [
   new THREE.Vector3(-2.5, 0, 1.36),
   new THREE.Vector3(-1.5, 0, 1.36),
   new THREE.Vector3(-0.5, 0, 1.36),
+  
+  new THREE.Vector3(0.5, 1.36, 0),
+  new THREE.Vector3(1.4611, 1.2296, 0),
+  new THREE.Vector3(2.145, 0.5, 0),
+  new THREE.Vector3(2.145, -0.5, 0),
+  new THREE.Vector3(1.4611, -1.2296, 0),
+  new THREE.Vector3(0.5, -1.36, 0),
+  new THREE.Vector3(-0.5, -1.36, 0),
+  new THREE.Vector3(-1.4611, -1.2296, 0),
+  new THREE.Vector3(-2.145, -0.5, 0),
+  new THREE.Vector3(-2.145, 0.5, 0),
+  new THREE.Vector3(-1.4611, 1.2296, 0),
+  new THREE.Vector3(-0.5, 1.36, 0),
 ]
 
 const useMarbles = (scene) => {
