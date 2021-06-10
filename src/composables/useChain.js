@@ -16,6 +16,12 @@ const useChain = (scene) => {
 
     chainRight.rotation.y = Math.PI;
 
+    const symmetric = true; // TODO: puzzle state value
+
+    if (!symmetric) {
+      chainRight.rotation.x = Math.PI / 2;
+    }
+
     scene.value.add(chainLeft);
     scene.value.add(chainRight);
   }
