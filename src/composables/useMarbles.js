@@ -1,98 +1,23 @@
-import { onMounted } from 'vue';
+import { onMounted, shallowRef } from 'vue';
 import * as THREE from 'three';
 
-const MARBLE_COLORS = [
-  0xff0000,
-  0xffff00,
-  0x00ff00,
-  0x0000ff,
-  0xff00ff,
-  0xff69b4
-]
-
-const SYMMETRIC_MARBLE_POSITIONS = [
-  new THREE.Vector3(0.5, 0, 1.36),
-  new THREE.Vector3(1.5, 0, 1.36),
-  new THREE.Vector3(2.5, 0, 1.36),
-  new THREE.Vector3(3.368, 0, 0.918),
-  new THREE.Vector3(3.725, 0, 0),
-  new THREE.Vector3(3.368, 0, -0.918),
-  new THREE.Vector3(2.5, 0, -1.36),
-  new THREE.Vector3(1.5, 0, -1.36),
-  new THREE.Vector3(0.5, 0, -1.36),
-
-  new THREE.Vector3(-0.5, 0, -1.36),
-  new THREE.Vector3(-1.5, 0, -1.36),
-  new THREE.Vector3(-2.5, 0, -1.36),
-  new THREE.Vector3(-3.368, 0, -0.918),
-  new THREE.Vector3(-3.725, 0, 0),
-  new THREE.Vector3(-3.368, 0, 0.918),
-  new THREE.Vector3(-2.5, 0, 1.36),
-  new THREE.Vector3(-1.5, 0, 1.36),
-  new THREE.Vector3(-0.5, 0, 1.36),
-  
-  new THREE.Vector3(0.5, 1.36, 0),
-  new THREE.Vector3(1.4611, 1.2296, 0),
-  new THREE.Vector3(2.145, 0.5, 0),
-  new THREE.Vector3(2.145, -0.5, 0),
-  new THREE.Vector3(1.4611, -1.2296, 0),
-  new THREE.Vector3(0.5, -1.36, 0),
-
-  new THREE.Vector3(-0.5, -1.36, 0),
-  new THREE.Vector3(-1.4611, -1.2296, 0),
-  new THREE.Vector3(-2.145, -0.5, 0),
-  new THREE.Vector3(-2.145, 0.5, 0),
-  new THREE.Vector3(-1.4611, 1.2296, 0),
-  new THREE.Vector3(-0.5, 1.36, 0),
-]
-
-const ASYMMETRIC_MARBLE_POSITIONS = [
-  new THREE.Vector3(0.5, 0, 1.36),
-  new THREE.Vector3(1.4611, 0, 1.2296),
-  new THREE.Vector3(2.145, 0, 0.5),
-  new THREE.Vector3(2.145, 0, -0.5),
-  new THREE.Vector3(1.4611, 0, -1.2296),
-  new THREE.Vector3(0.5, 0, -1.36),
-
-  new THREE.Vector3(-0.5, 0, -1.36),
-  new THREE.Vector3(-1.5, 0, -1.36),
-  new THREE.Vector3(-2.5, 0, -1.36),
-  new THREE.Vector3(-3.368, 0, -0.918),
-  new THREE.Vector3(-3.725, 0, 0),
-  new THREE.Vector3(-3.368, 0, 0.918),
-  new THREE.Vector3(-2.5, 0, 1.36),
-  new THREE.Vector3(-1.5, 0, 1.36),
-  new THREE.Vector3(-0.5, 0, 1.36),
-
-  new THREE.Vector3(0.5, 1.36, 0),
-  new THREE.Vector3(1.5, 1.36, 0),
-  new THREE.Vector3(2.5, 1.36, 0),
-  new THREE.Vector3(3.368, 0.918, 0),
-  new THREE.Vector3(3.725, 0, 0),
-  new THREE.Vector3(3.368, -0.918, 0),
-  new THREE.Vector3(2.5, -1.36, 0),
-  new THREE.Vector3(1.5, -1.36, 0),
-  new THREE.Vector3(0.5, -1.36, 0),
-
-  new THREE.Vector3(-0.5, -1.36, 0),
-  new THREE.Vector3(-1.4611, -1.2296, 0),
-  new THREE.Vector3(-2.145, -0.5, 0),
-  new THREE.Vector3(-2.145, 0.5, 0),
-  new THREE.Vector3(-1.4611, 1.2296, 0),
-  new THREE.Vector3(-0.5, 1.36, 0),
-]
+import {
+  MARBLE_COLORS,
+  SYMMETRIC_MARBLE_POSITIONS,
+  ASYMMETRIC_MARBLE_POSITIONS
+} from '@/constants';
 
 const useMarbles = (scene) => {
   const geometry = new THREE.SphereGeometry(0.5, 32, 32);
 
   const materials = [];
-  const marbles = [];
+  const marbles = shallowRef([]);
 
   for (let color of MARBLE_COLORS) {
     materials.push(new THREE.MeshStandardMaterial({color}))
   }
 
-  const symmetric = true; // TODO: use puzzle state value
+  const symmetric = false; // TODO: use puzzle state value
   const positions = symmetric ? SYMMETRIC_MARBLE_POSITIONS : ASYMMETRIC_MARBLE_POSITIONS;
 
   for (let i = 0; i < positions.length; i++) {
@@ -103,11 +28,11 @@ const useMarbles = (scene) => {
     marble.position.y = pos.y;
     marble.position.z = pos.z;
 
-    marbles.push(marble);
+    marbles.value.push(marble);
   }
 
   const initMarbles = () => {
-    for (let marble of marbles) {
+    for (let marble of marbles.value) {
       scene.value.add(marble);
     }
   }
@@ -115,6 +40,8 @@ const useMarbles = (scene) => {
   onMounted(initMarbles);
 
   return {
+    marbles,
+
     initMarbles
   }
 }
