@@ -39,8 +39,4 @@ export default {
 
 <style scoped>
 
-div {
-  height: 100%;
-}
-
 </style>

@@ -1,13 +1,19 @@
 <template>
-  <Viewport />
+  <div class='d-flex flex-column h-100'>
+    <Navbar />
+    <Viewport class='flex-grow-1' />
+  </div>
+  
 </template>
 
 <script>
-import Viewport from './components/Viewport.vue'
+import Navbar from './components/Navbar';
+import Viewport from './components/Viewport.vue';
 
 export default {
   name: 'App',
   components: {
+    Navbar,
     Viewport
   }
 }
