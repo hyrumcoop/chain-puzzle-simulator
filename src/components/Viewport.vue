@@ -1,8 +1,14 @@
 <template>
-  <div ref='viewport'></div>
+  <div class='d-flex flex-column'>
+    <div ref='viewport' class='flex-grow-1'></div>
+    
+    <viewport-controls />
+  </div>
 </template>
 
 <script>
+import ViewportControls from './ViewportControls.vue';
+
 import useRenderer from '@/composables/useRenderer';
 import useCameraControls from '@/composables/useCameraControls';
 import useLighting from '@/composables/useLighting';
@@ -12,6 +18,9 @@ import useAnimation from '@/composables/useAnimation';
 import useKeyboard from '@/composables/useKeyboard';
 
 export default {
+  components: {
+    ViewportControls
+  },
   setup() {
     const renderer = useRenderer();
     const cameraControls = useCameraControls(renderer.camera, renderer.viewport, renderer.onAnimate);
