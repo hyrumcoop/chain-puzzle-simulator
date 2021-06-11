@@ -7,6 +7,7 @@
 </template>
 
 <script>
+import { shallowRef } from 'vue';
 import ViewportControls from './ViewportControls.vue';
 
 import useRenderer from '@/composables/useRenderer';
@@ -17,21 +18,26 @@ import useMarbles from '@/composables/useMarbles';
 import useAnimation from '@/composables/useAnimation';
 import useKeyboard from '@/composables/useKeyboard';
 
+import ChainPuzzle from '@/modules/ChainPuzzle';
+
 export default {
   components: {
     ViewportControls
   },
   setup() {
+    const puzzle = shallowRef(new ChainPuzzle());
+
     const renderer = useRenderer();
     const cameraControls = useCameraControls(renderer.camera, renderer.viewport, renderer.onAnimate);
     const lighting = useLighting(renderer.scene);
     const chain = useChain(renderer.scene);
     const marbles = useMarbles(renderer.scene);
-    const animation = useAnimation(chain, marbles.marbles);
+    const animation = useAnimation(puzzle, chain, marbles.marbles);
 
-    useKeyboard(animation);
+    useKeyboard(puzzle);
     
     return {
+      puzzle,
       ...renderer,
       ...cameraControls,
       ...lighting,

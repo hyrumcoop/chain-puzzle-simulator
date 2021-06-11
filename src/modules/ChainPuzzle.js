@@ -93,10 +93,10 @@ ChainPuzzle.prototype.transform = function(operation, checkSolved = true) {
     this.symmetric = !this.symmetric;
   }
 
-  this.fireEvent('transform', [this, operation]);
+  this.fireEvent('transform', [operation]);
 
   if (checkSolved && this.isSolved()) {
-    this.fireEvent('solve', [this]);
+    this.fireEvent('solve', []);
   }
 
   return this;
@@ -130,7 +130,7 @@ ChainPuzzle.prototype.reset = function() {
   this.symmetric = false;
   this.marbles = DEFAULT_MARBLES.slice(0);
 
-  this.fireEvent('reset', [this]);
+  this.fireEvent('reset', []);
 
   return this;
 }

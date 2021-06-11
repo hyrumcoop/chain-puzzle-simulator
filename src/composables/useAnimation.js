@@ -4,7 +4,7 @@ import {
   Operations
 } from '@/constants';
 
-const useAnimation = (chain, marbles) => {
+const useAnimation = (puzzle, chain, marbles) => {
   let symmetric = false; // TODO: get from puzzle state
 
   const transform = op => {
@@ -151,6 +151,8 @@ const useAnimation = (chain, marbles) => {
     updateChainOrientation();
     updateMarblePositions();
   }
+
+  puzzle.value.onTransform(transform);
 
   return {
     transform,

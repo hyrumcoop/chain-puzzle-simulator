@@ -1,22 +1,21 @@
 import { onMounted } from 'vue';
 
-const useKeyboard = (animation) => {
+import { Operations } from '@/constants';
+
+const KeyOperations = {
+  'a': Operations.INNER_SHIFT,
+  'd': Operations.INVERSE_INNER_SHIFT,
+  'q': Operations.INVERSE_OUTER_SHIFT,
+  'e': Operations.OUTER_SHIFT,
+  'w': Operations.ROTATE,
+  's': Operations.INVERSE_ROTATE
+}
+
+const useKeyboard = (puzzle) => {
   onMounted(() => {
     window.addEventListener('keypress', event => {
-      switch(event.key.toLowerCase()) {
-        case 'a':
-          return animation.innerShift();
-        case 'd':
-          return animation.inverseInnerShift();
-        case 'q':
-          return animation.inverseOuterShift();
-        case 'e':
-          return animation.outerShift();
-        case 'w':
-          return animation.rotate();
-        case 's':
-          return animation.inverseRotate();
-      }
+      const key = event.key.toLowerCase();
+      if (key in KeyOperations) puzzle.value.transform(KeyOperations[key]);
     })
   });
 }
