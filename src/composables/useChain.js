@@ -1,4 +1,4 @@
-import { onMounted, shallowRef } from 'vue';
+import { onMounted, ref, shallowRef } from 'vue';
 
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
@@ -10,6 +10,11 @@ const useChain = (scene) => {
   const chainLeft = shallowRef(null);
   const chainRight = shallowRef(null);
 
+  const chainSymmetric = ref(false);
+
+  const loadListeners = [];
+  const onChainLoad = func => loadListeners.push(func);
+
   const initChain = async () => {
     const loadedData = await loader.loadAsync('./chain.glb');
     const chainGeometry = loadedData.scene.children[0].geometry;
@@ -19,14 +24,10 @@ const useChain = (scene) => {
 
     chainRight.value.rotation.y = Math.PI;
 
-    const symmetric = false; // TODO: puzzle state value
-
-    if (!symmetric) {
-      chainRight.value.rotation.x = Math.PI / 2;
-    }
-
     scene.value.add(chainLeft.value);
     scene.value.add(chainRight.value);
+
+    loadListeners.forEach(func => func());
   }
 
   onMounted(initChain);
@@ -34,8 +35,10 @@ const useChain = (scene) => {
   return {
     chainLeft,
     chainRight,
+    chainSymmetric,
 
-    initChain
+    initChain,
+    onChainLoad
   }
 }
 

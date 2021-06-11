@@ -1,11 +1,17 @@
 import {
   SYMMETRIC_MARBLE_POSITIONS,
   ASYMMETRIC_MARBLE_POSITIONS, 
-  Operations
+  Operations,
+  OperationMappings
 } from '@/constants';
 
 const useAnimation = (puzzle, chain, marbles) => {
-  let symmetric = false; // TODO: get from puzzle state
+  const { chainRight, chainSymmetric } = chain;
+  chainSymmetric.value = puzzle.value.symmetric; // set physical chain state to equal puzzle state
+
+  const curMappings = () => {
+    return chainSymmetric.value ? OperationMappings.Symmetric : OperationMappings.Asymmetric;
+  }
 
   const transform = op => {
     switch(op) {
@@ -33,7 +39,7 @@ const useAnimation = (puzzle, chain, marbles) => {
   }
 
   const updateMarblePositions = () => {
-    const positions = symmetric ? SYMMETRIC_MARBLE_POSITIONS : ASYMMETRIC_MARBLE_POSITIONS;
+    const positions = chainSymmetric.value ? SYMMETRIC_MARBLE_POSITIONS : ASYMMETRIC_MARBLE_POSITIONS;
 
     marbles.value.forEach((marble, i) => {
       const pos = positions[i];
@@ -45,127 +51,53 @@ const useAnimation = (puzzle, chain, marbles) => {
   }
 
   const updateChainOrientation = () => {
-    if (symmetric) {
-      chain.chainRight.value.rotation.x = 0;
+    if (chainSymmetric.value) {
+      chainRight.value.rotation.x = 0;
     } else {
-      chain.chainRight.value.rotation.x = Math.PI / 2;
+      chainRight.value.rotation.x = Math.PI / 2;
     }
   }
 
   const innerShift = () => {
-    if (symmetric) {
-      mapMarbles([
-        1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 0,
-        18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29
-      ]);
-    } else {
-      mapMarbles([
-        1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 0,
-        15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29
-      ]);
-    }
-
+    mapMarbles(curMappings()[Operations.INNER_SHIFT]);
     updateMarblePositions();
   }
 
   const inverseInnerShift = () => {
-    if (symmetric) {
-      mapMarbles([
-        17, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
-        18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29
-      ]);
-    } else {
-      mapMarbles([
-        14, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,
-        15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29
-      ]);
-    }
-
+    mapMarbles(curMappings()[Operations.INVERSE_INNER_SHIFT]);
     updateMarblePositions();
   }
 
   const outerShift = () => {
-    if (symmetric) {
-      mapMarbles([
-        0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
-        29, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28
-      ]);
-    } else {
-      mapMarbles([
-        0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,
-        29, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28
-      ]);
-    }
-
+    mapMarbles(curMappings()[Operations.OUTER_SHIFT]);
     updateMarblePositions();
   }
 
   const inverseOuterShift = () => {
-    if (symmetric) {
-      mapMarbles([
-        0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
-        19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 18
-      ]);
-    } else {
-      mapMarbles([
-        0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,
-        16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 15
-      ]);
-    }
-
+    mapMarbles(curMappings()[Operations.INVERSE_OUTER_SHIFT]);
     updateMarblePositions();
   }
 
   const rotate = () => {
-    if (symmetric) {
-      mapMarbles([
-        23, 22, 21, 20, 19, 18, 9, 10, 11, 12, 13, 14, 15, 16, 17,
-        0, 1, 2, 3, 4, 5, 6, 7, 8, 24, 25, 26, 27, 28, 29
-      ])
-    } else {
-      mapMarbles([
-        23, 22, 21, 20, 19, 18, 17, 16, 15, 6, 7, 8, 9, 10, 11, 12,
-        13, 14, 0, 1, 2, 3, 4, 5, 24, 25, 26, 27, 28, 29
-      ])
-    }
+    mapMarbles(curMappings()[Operations.ROTATE]);
 
-    symmetric = !symmetric;
+    chainSymmetric.value = !chainSymmetric.value;
     updateChainOrientation();
     updateMarblePositions();
   }
 
   const inverseRotate = () => {
-    if (symmetric) {
-      mapMarbles([
-        18, 19, 20, 21, 22, 23, 9, 10, 11, 12, 13, 14, 15, 16, 17,
-        8, 7, 6, 5, 4, 3, 2, 1, 0, 24, 25, 26, 27, 28, 29,
-      ])
-    } else {
-      mapMarbles([
-        15, 16, 17, 18, 19, 20, 21, 22, 23, 6, 7, 8, 9, 10, 11, 12,
-        13, 14, 5, 4, 3, 2, 1, 0, 24, 25, 26, 27, 28, 29,
-      ])
-    }
+    mapMarbles(curMappings()[Operations.INVERSE_ROTATE]);
 
-    symmetric = !symmetric;
+    chainSymmetric.value = !chainSymmetric.value;
     updateChainOrientation();
     updateMarblePositions();
   }
 
+  chain.onChainLoad(updateChainOrientation);
   puzzle.value.onTransform(transform);
 
-  return {
-    transform,
-
-    innerShift,
-    inverseInnerShift,
-
-    outerShift,
-    inverseOuterShift,
-
-    rotate,
-    inverseRotate
-  }
+  return {}
 }
 
 export default useAnimation;
