@@ -1,13 +1,8 @@
 import * as THREE from 'three';
 
-export const Operations = {
-  ROTATE: 0,
-  INNER_SHIFT: 1,
-  OUTER_SHIFT: 2,
-  INVERSE_ROTATE: 3,
-  INVERSE_INNER_SHIFT: 4,
-  INVERSE_OUTER_SHIFT: 5,
-}
+import { Operations, OperationMappings } from './operations';
+
+export { Operations, OperationMappings };
 
 export const MARBLE_COLORS = [
   0xff0000,
