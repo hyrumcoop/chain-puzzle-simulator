@@ -10,6 +10,7 @@ const DEFAULT_MARBLES = [
   5, 5, 5, 5, 5
 ];
 
+const ENCODE_STR = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghij';
 const DEFAULT_SCRAMBLE = 60; // default number of iterations to scramble
 
 function ChainPuzzle(symmetric = false, marbles = DEFAULT_MARBLES.slice(0)) {
@@ -21,6 +22,32 @@ function ChainPuzzle(symmetric = false, marbles = DEFAULT_MARBLES.slice(0)) {
     reset: [],
     solve: []
   }
+}
+
+ChainPuzzle.prototype.encode = function() {
+  let str = this.symmetric ? 'S' : 'A'; // S = symmetric, A = asymmetric
+
+  for (let i = 0; i < 30; i += 2) {
+    let val = this.marbles[i] * 6 + this.marbles[i + 1];
+    str += ENCODE_STR[val];
+  }
+
+  return str;
+}
+
+ChainPuzzle.decode = str => {
+  // TODO: validation
+
+  const symmetric = str[0] == 'S';
+  const marbles = [];
+
+  str.slice(1).split('').forEach((char, i) => {
+    const val = ENCODE_STR.indexOf(char);
+    marbles[i*2] = Math.floor(val / 6);
+    marbles[i*2 + 1] = val % 6;
+  });
+
+  return new ChainPuzzle(symmetric, marbles);
 }
 
 ChainPuzzle.prototype.map = function(mapping) {
