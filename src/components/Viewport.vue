@@ -1,6 +1,8 @@
 <template>
   <div class='d-flex flex-column'>
-    <div ref='viewport' class='flex-grow-1'></div>
+    <div ref='viewport' class='flex-grow-1'>
+      <puzzle-code-box :code='puzzleCode' />
+    </div>
     
     <viewport-controls
       @scramble='scramble'
@@ -10,8 +12,10 @@
 </template>
 
 <script>
-import { shallowRef } from 'vue';
-import ViewportControls from './ViewportControls.vue';
+import { ref, shallowRef } from 'vue';
+
+import ViewportControls from './ViewportControls';
+import PuzzleCodeBox from './PuzzleCodeBox';
 
 import useRenderer from '@/composables/useRenderer';
 import useCameraControls from '@/composables/useCameraControls';
@@ -25,10 +29,15 @@ import ChainPuzzle from '@/modules/ChainPuzzle';
 
 export default {
   components: {
-    ViewportControls
+    ViewportControls,
+    PuzzleCodeBox
   },
   setup() {
     const puzzle = shallowRef(new ChainPuzzle());
+    const puzzleCode = ref(puzzle.value.encode());
+
+    puzzle.value.onTransform(() => puzzleCode.value = puzzle.value.encode());
+    puzzle.value.onReset(() => puzzleCode.value = puzzle.value.encode());
 
     const renderer = useRenderer();
     const cameraControls = useCameraControls(renderer.camera, renderer.viewport, renderer.onAnimate);
@@ -41,6 +50,8 @@ export default {
     
     return {
       puzzle,
+      puzzleCode,
+
       ...renderer,
       ...cameraControls,
       ...lighting,
