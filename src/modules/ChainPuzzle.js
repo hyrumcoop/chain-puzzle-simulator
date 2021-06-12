@@ -10,6 +10,8 @@ const DEFAULT_MARBLES = [
   5, 5, 5, 5, 5
 ];
 
+const DEFAULT_SCRAMBLE = 60; // default number of iterations to scramble
+
 function ChainPuzzle(symmetric = false, marbles = DEFAULT_MARBLES.slice(0)) {
   this.symmetric = symmetric;
   this.marbles = marbles;
@@ -64,6 +66,8 @@ ChainPuzzle.prototype.normalize = function() {
 }
 
 ChainPuzzle.prototype.scramble = function(iterations) {
+  if (!iterations) iterations = DEFAULT_SCRAMBLE;
+
   let lastOperation = Operations.INNER_SHIFT;
 
   for (let i = 0; i < iterations; i++) {
@@ -71,7 +75,7 @@ ChainPuzzle.prototype.scramble = function(iterations) {
     
     do {
       operation = Math.floor(Math.random() * 6);
-    } while(operation == lastOperation || (operation%3 != lastOperation%3));
+    } while(operation != lastOperation && (operation%3 == lastOperation%3));
 
     this.transform(operation);
     lastOperation = operation;

@@ -9,6 +9,9 @@ const useAnimation = (puzzle, chain, marbles) => {
   const { chainRight, chainSymmetric } = chain;
   chainSymmetric.value = puzzle.value.symmetric; // set physical chain state to equal puzzle state
 
+  const operationQueue = [];
+  let processingQueue = false;
+
   const curMappings = () => {
     return chainSymmetric.value ? OperationMappings.Symmetric : OperationMappings.Asymmetric;
   }
@@ -28,6 +31,16 @@ const useAnimation = (puzzle, chain, marbles) => {
       case Operations.INVERSE_OUTER_SHIFT:
         return inverseOuterShift();
     }
+  }
+
+  const processQueue = () => {
+    if (operationQueue.length == 0) {
+      processingQueue = false;
+      return;
+    }
+
+    transform(operationQueue.shift());
+    setTimeout(processQueue, 100);
   }
 
   const mapMarbles = mapping => {
@@ -95,7 +108,15 @@ const useAnimation = (puzzle, chain, marbles) => {
   }
 
   chain.onChainLoad(updateChainOrientation);
-  puzzle.value.onTransform(transform);
+
+  puzzle.value.onTransform(op => {
+    operationQueue.push(op);
+
+    if (!processingQueue) {
+      processingQueue = true;
+      processQueue();
+    }
+  });
 
   return {}
 }

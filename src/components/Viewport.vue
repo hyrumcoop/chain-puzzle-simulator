@@ -2,7 +2,9 @@
   <div class='d-flex flex-column'>
     <div ref='viewport' class='flex-grow-1'></div>
     
-    <viewport-controls />
+    <viewport-controls
+      @scramble='scramble'
+    />
   </div>
 </template>
 
@@ -48,6 +50,11 @@ export default {
   },
   mounted() {
     this.animate();
+  },
+  methods: {
+    scramble() {
+      this.puzzle.scramble()
+    }
   }
 }
 </script>
