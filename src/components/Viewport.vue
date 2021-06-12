@@ -4,6 +4,8 @@
       <puzzle-code-box :code='puzzleCode' />
     </div>
     
+    <playback-bar :operations='[3, 3, 0, 3, 4, 3, 4, 1, 5, 3, 3, 2, 5, 2, 1, 2, 1, 2, 2, 0]' />
+
     <viewport-controls
       @scramble='scramble'
       @reset='reset'
@@ -14,8 +16,9 @@
 <script>
 import { ref, shallowRef } from 'vue';
 
-import ViewportControls from './ViewportControls';
 import PuzzleCodeBox from './PuzzleCodeBox';
+import ViewportControls from './ViewportControls';
+import PlaybackBar from './PlaybackBar';
 
 import useRenderer from '@/composables/useRenderer';
 import useCameraControls from '@/composables/useCameraControls';
@@ -30,7 +33,8 @@ import ChainPuzzle from '@/modules/ChainPuzzle';
 export default {
   components: {
     ViewportControls,
-    PuzzleCodeBox
+    PuzzleCodeBox,
+    PlaybackBar
   },
   setup() {
     const puzzle = shallowRef(new ChainPuzzle());
