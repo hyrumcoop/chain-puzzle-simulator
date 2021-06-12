@@ -5,8 +5,14 @@ import {
   OperationMappings
 } from '@/constants';
 
-const useAnimation = (puzzle, chain, marbles) => {
-  const { chainSymmetric, updateChainOrientation } = chain;
+import { OperationInterpolations, ChainInterpolations } from '@/helpers/interpolation';
+
+import * as THREE from 'three';
+
+const ANIMATION_DURATION = 0.25;
+
+const useAnimation = (puzzle, chain, marbles, renderer) => {
+  const { chainRight, chainSymmetric, updateChainOrientation } = chain;
 
   const operationQueue = [];
   let processingQueue = false;
@@ -32,14 +38,17 @@ const useAnimation = (puzzle, chain, marbles) => {
     }
   }
 
-  const processQueue = () => {
+  const processQueue = async () => {
     if (operationQueue.length == 0) {
       processingQueue = false;
       return;
     }
 
-    transform(operationQueue.shift());
-    setTimeout(processQueue, 100);
+    const op = operationQueue.shift();
+
+    await animateOperation(op, ANIMATION_DURATION);
+    transform(op);
+    processQueue();
   }
 
   const mapMarbles = mapping => {
@@ -97,6 +106,75 @@ const useAnimation = (puzzle, chain, marbles) => {
     updateChainOrientation();
     updateMarblePositions();
   }
+  
+  let animationPromise = null;
+  let animateFunc = () => {};
+
+  const cancelAnimation = async () => {
+    if (animationPromise) {
+      await animationPromise.cancel();
+      updateMarblePositions();
+      updateChainOrientation();
+    }
+  }
+
+  const animateOperation = async (op, duration = 0.5) => {
+    const clock = new THREE.Clock();
+    clock.start();
+
+    let shouldCancel = false;
+
+    const interpolations = (
+      chainSymmetric.value ? OperationInterpolations.Symmetric : OperationInterpolations.Asymmetric
+    )[op];
+
+    let chainInterpolation = null;
+
+    if (op == Operations.ROTATE || op == Operations.INVERSE_ROTATE) {
+      chainInterpolation = (chainSymmetric.value ? ChainInterpolations.Symmetric : ChainInterpolations.Asymmetric)[op];
+    }
+
+    animationPromise = new Promise(res => {
+      animateFunc = () => {
+        if (shouldCancel) {
+          animationPromise = null;
+          animateFunc = () => {};
+
+          return res();
+        }
+
+        const elapsedTime = clock.getElapsedTime();
+        const pos = Math.min(elapsedTime / duration, 1);
+
+        interpolations.forEach((interpolation, i) => {
+          if (!interpolation) return;
+
+          marbles.value[i].position.copy(interpolation(pos));
+        });
+
+        if (chainInterpolation) {
+          chainRight.value.rotation.copy(chainInterpolation(pos));
+        }
+
+        if (elapsedTime >= duration) {
+          animationPromise = null;
+          animateFunc = () => {};
+
+          res();
+        }
+      }
+    });
+
+    animationPromise.cancel = async function() {
+      shouldCancel = true;
+      await this;
+    }
+
+    return animationPromise;
+  }
+
+  // a somewhat hacky alternative to constantly registering and unregistering new render handlers
+  renderer.onAnimate(() => animateFunc());
 
   puzzle.value.onTransform(op => {
     operationQueue.push(op);
@@ -107,7 +185,9 @@ const useAnimation = (puzzle, chain, marbles) => {
     }
   });
 
-  return {}
+  return {
+    cancelAnimation
+  }
 }
 
 export default useAnimation;

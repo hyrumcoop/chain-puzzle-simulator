@@ -35,7 +35,7 @@ export default {
     const lighting = useLighting(renderer.scene);
     const chain = useChain(renderer.scene, puzzle);
     const marbles = useMarbles(renderer.scene, puzzle);
-    const animation = useAnimation(puzzle, chain, marbles.marbles);
+    const animation = useAnimation(puzzle, chain, marbles.marbles, renderer);
 
     useKeyboard(puzzle);
     
