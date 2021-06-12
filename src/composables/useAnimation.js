@@ -6,8 +6,7 @@ import {
 } from '@/constants';
 
 const useAnimation = (puzzle, chain, marbles) => {
-  const { chainRight, chainSymmetric } = chain;
-  chainSymmetric.value = puzzle.value.symmetric; // set physical chain state to equal puzzle state
+  const { chainSymmetric, updateChainOrientation } = chain;
 
   const operationQueue = [];
   let processingQueue = false;
@@ -63,14 +62,6 @@ const useAnimation = (puzzle, chain, marbles) => {
     });
   }
 
-  const updateChainOrientation = () => {
-    if (chainSymmetric.value) {
-      chainRight.value.rotation.x = 0;
-    } else {
-      chainRight.value.rotation.x = Math.PI / 2;
-    }
-  }
-
   const innerShift = () => {
     mapMarbles(curMappings()[Operations.INNER_SHIFT]);
     updateMarblePositions();
@@ -106,8 +97,6 @@ const useAnimation = (puzzle, chain, marbles) => {
     updateChainOrientation();
     updateMarblePositions();
   }
-
-  chain.onChainLoad(updateChainOrientation);
 
   puzzle.value.onTransform(op => {
     operationQueue.push(op);

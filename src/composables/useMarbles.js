@@ -7,42 +7,46 @@ import {
   ASYMMETRIC_MARBLE_POSITIONS
 } from '@/constants';
 
-const useMarbles = (scene) => {
+const useMarbles = (scene, puzzle) => {
   const geometry = new THREE.SphereGeometry(0.5, 32, 32);
-
   const materials = [];
-  const marbles = shallowRef([]);
 
   for (let color of MARBLE_COLORS) {
     materials.push(new THREE.MeshStandardMaterial({color}))
   }
 
-  const symmetric = false; // TODO: use puzzle state value
-  const positions = symmetric ? SYMMETRIC_MARBLE_POSITIONS : ASYMMETRIC_MARBLE_POSITIONS;
+  const marbles = shallowRef([]);
 
-  for (let i = 0; i < positions.length; i++) {
-    const pos = positions[i];
-    const marble = new THREE.Mesh(geometry, materials[Math.floor(i / 5)]);
+  const setMarbleOrientation = (symmetric, order) => {
+    const positions = symmetric ? SYMMETRIC_MARBLE_POSITIONS : ASYMMETRIC_MARBLE_POSITIONS;
 
-    marble.position.x = pos.x;
-    marble.position.y = pos.y;
-    marble.position.z = pos.z;
+    order.forEach((color, i) => {
+      const pos = positions[i];
+      const marble = new THREE.Mesh(geometry, materials[color]);
 
-    marbles.value.push(marble);
+      marble.position.x = pos.x;
+      marble.position.y = pos.y;
+      marble.position.z = pos.z;
+
+      if (marbles.value[i]) scene.value.remove(marbles.value[i]);
+
+      scene.value.add(marble);
+      marbles.value[i] = marble;
+    });
   }
 
   const initMarbles = () => {
-    for (let marble of marbles.value) {
-      scene.value.add(marble);
-    }
+    setMarbleOrientation(puzzle.value.symmetric, puzzle.value.marbles);
   }
 
   onMounted(initMarbles);
+  puzzle.value.onReset(initMarbles);
 
   return {
     marbles,
 
-    initMarbles
+    initMarbles,
+    setMarbleOrientation
   }
 }
 

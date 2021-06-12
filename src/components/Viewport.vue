@@ -4,6 +4,7 @@
     
     <viewport-controls
       @scramble='scramble'
+      @reset='reset'
     />
   </div>
 </template>
@@ -32,8 +33,8 @@ export default {
     const renderer = useRenderer();
     const cameraControls = useCameraControls(renderer.camera, renderer.viewport, renderer.onAnimate);
     const lighting = useLighting(renderer.scene);
-    const chain = useChain(renderer.scene);
-    const marbles = useMarbles(renderer.scene);
+    const chain = useChain(renderer.scene, puzzle);
+    const marbles = useMarbles(renderer.scene, puzzle);
     const animation = useAnimation(puzzle, chain, marbles.marbles);
 
     useKeyboard(puzzle);
@@ -54,6 +55,9 @@ export default {
   methods: {
     scramble() {
       this.puzzle.scramble()
+    },
+    reset() {
+      this.puzzle.reset()
     }
   }
 }
