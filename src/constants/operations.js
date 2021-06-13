@@ -7,6 +7,15 @@ export const Operations = {
   INVERSE_OUTER_SHIFT: 5,
 }
 
+export const InverseOperations = {
+  [Operations.ROTATE]: Operations.INVERSE_ROTATE,
+  [Operations.INNER_SHIFT]: Operations.INVERSE_INNER_SHIFT,
+  [Operations.OUTER_SHIFT]: Operations.INVERSE_OUTER_SHIFT,
+  [Operations.INVERSE_ROTATE]: Operations.ROTATE,
+  [Operations.INVERSE_INNER_SHIFT]: Operations.INNER_SHIFT,
+  [Operations.INVERSE_OUTER_SHIFT]: Operations.OUTER_SHIFT
+}
+
 const OperationMappings = {
   Symmetric: {},
   Asymmetric: {}

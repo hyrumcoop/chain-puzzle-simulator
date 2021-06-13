@@ -6,7 +6,7 @@
 
         <playback-bar
           :operations='playbackQueue'
-          :currentIndex='playbackQueueIndex'
+          :currentIndex='playbackQueueIndex - 1'
         />
       </div>
     </div>

@@ -16,7 +16,17 @@ const useKeyboard = (playback) => {
     window.addEventListener('keypress', event => {
       const key = event.key.toLowerCase();
       if (key in KeyOperations) playback.pushOperation(KeyOperations[key]);
-    })
+    });
+
+    window.addEventListener('keydown', event => {
+      if (event.code == 'ArrowRight') {
+        playback.next();
+      } else if (event.code == 'ArrowLeft') {
+        playback.prev();
+      } else if (event.code == 'Space') {
+        playback.togglePlay();
+      }
+    });
   });
 }
 

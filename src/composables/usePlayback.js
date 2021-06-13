@@ -1,5 +1,7 @@
 import { ref } from 'vue';
 
+import { InverseOperations } from '@/constants';
+
 const PlaybackMode = {
   FREE: 0, // user is in control
   DEMONSTRATION: 1, // simulator is in control
@@ -47,7 +49,7 @@ const usePlayback = (puzzle, animation) => {
       if (!playing) return;
       if (playbackQueueIndex.value >= playbackQueue.value.length) return pause();
 
-      await next();
+      await internalNext();
       recursivePlay();
     };
 
@@ -59,6 +61,14 @@ const usePlayback = (puzzle, animation) => {
     await animation.cancelAnimation();
   }
 
+  const togglePlay = async () => {
+    if (playing) {
+      await pause()
+    } else {
+      await play()
+    }
+  }
+
   const stop = async () => {
     playbackMode.value = PlaybackMode.FREE;
     playbackQueue.value = [];
@@ -67,12 +77,36 @@ const usePlayback = (puzzle, animation) => {
     await animation.cancelAnimation();
   }
 
-  const next = async () => {
+  // only safe to call from within this composable
+  const internalNext  = async () => {
     if (playbackMode.value == PlaybackMode.FREE || playbackQueueIndex.value >= playbackQueue.value.length) return;
 
     const op = playbackQueue.value[playbackQueueIndex.value++];
     puzzle.value.transform(op);
+
+    await animation.cancelAnimation();
       
+    const promise = animation.animateOperation(op);
+    animation.transform(op);
+
+    await promise;
+  }
+
+  // safe to call from outside
+  const next = async () => {
+    if (playing) return;
+    await internalNext();
+  }
+
+  const prev = async () => {
+    if (playbackMode.value == PlaybackMode.FREE || playbackQueueIndex.value <= 0) return;
+    if (playing) return await pause();
+    
+    const op = InverseOperations[playbackQueue.value[--playbackQueueIndex.value]];
+    puzzle.value.transform(op);
+
+    await animation.cancelAnimation();
+
     const promise = animation.animateOperation(op);
     animation.transform(op);
 
@@ -89,8 +123,10 @@ const usePlayback = (puzzle, animation) => {
 
     play,
     pause,
+    togglePlay,
     stop,
-    next
+    next,
+    prev
   }
 }
 

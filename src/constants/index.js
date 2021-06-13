@@ -1,8 +1,8 @@
 import * as THREE from 'three';
 
-import { Operations, OperationMappings } from './operations';
+import { Operations, InverseOperations, OperationMappings } from './operations';
 
-export { Operations, OperationMappings };
+export { Operations, InverseOperations, OperationMappings };
 
 export const MARBLE_COLORS = [
   0xff0000,
