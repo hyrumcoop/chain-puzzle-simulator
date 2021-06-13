@@ -39,7 +39,8 @@ const OperationTooltip = {
 export default {
   name: 'OperationIcon',
   props: {
-    op: Number
+    op: Number,
+    selected: Boolean
   },
   mounted() {
     new Tooltip(this.$el, {
@@ -48,7 +49,10 @@ export default {
   },
   computed: {
     opClass() {
-      return OperationClass[this.op];
+      return {
+        [OperationClass[this.op]]: true,
+        selected: this.selected
+      }
     },
     opText() {
       return OperationText[this.op];
@@ -66,6 +70,9 @@ export default {
   width: 40px;
   height: 40px;
 
+  min-width: 40px;
+  min-height: 40px;
+
   margin-right: 4px;
 
   justify-content: center;
@@ -80,6 +87,12 @@ export default {
 
   transition: background-color 0.4 ease;
   cursor: pointer;
+}
+
+.selected {
+  background-color: #2e7d32;
+  color: white;
+  border-color: #005005;
 }
 
 .op-icon:hover {

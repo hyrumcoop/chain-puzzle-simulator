@@ -85,7 +85,7 @@ const usePlayback = (puzzle, animation) => {
     playbackMode,
 
     pushOperation,
-    setSequence,
+    setPlaybackSequence: setSequence,
 
     play,
     pause,

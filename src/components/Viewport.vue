@@ -6,6 +6,7 @@
 
         <playback-bar
           :operations='playbackQueue'
+          :currentIndex='playbackQueueIndex'
         />
       </div>
     </div>
@@ -34,6 +35,7 @@ import useKeyboard from '@/composables/useKeyboard';
 import usePlayback from '@/composables/usePlayback';
 
 import ChainPuzzle from '@/modules/ChainPuzzle';
+import OperationSequence from '@/modules/OperationSequence';
 
 export default {
   components: {
@@ -75,8 +77,9 @@ export default {
     this.animate();
   },
   methods: {
-    scramble() {
-      this.puzzle.scramble()
+    async scramble() {
+      await this.setPlaybackSequence(OperationSequence.scramble());
+      this.play();
     },
     reset() {
       this.puzzle.reset()

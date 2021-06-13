@@ -1,6 +1,6 @@
 <template>
   <div class='playback-bar d-flex flex-row'  v-if='operations.length > 0'>
-    <operation-icon v-for='(op, i) in operations' :op='op' :key='i' />
+    <operation-icon v-for='(op, i) in operations' :op='op' :key='i' :selected='i == currentIndex' />
   </div>
 </template>
 
@@ -13,7 +13,8 @@ export default {
     OperationIcon
   },
   props: {
-    operations: Array
+    operations: Array,
+    currentIndex: Number
   }
 }
 </script>
@@ -23,6 +24,7 @@ export default {
 .playback-bar {
   position: absolute;
   width: 100%;
+  overflow: hidden;
   bottom: 0;
 
   padding: 8px 16px;
