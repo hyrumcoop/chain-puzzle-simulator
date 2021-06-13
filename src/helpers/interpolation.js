@@ -5,7 +5,7 @@ import { SYMMETRIC_MARBLE_POSITIONS } from '../constants';
 
 // indices of marbles that physically move during rotation
 // (excludes marbles that change indices but remain stationary)
-const SYMMETRIC_ROTATE_MOVERS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 18, 19, 20, 21, 22, 23];
+const SYMMETRIC_ROTATE_MOVERS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 18, 19, 20, 21, 22, 23];
 const ASYMMETRIC_ROTATE_MOVERS = [0, 1, 2, 3, 4, 5, 15, 16, 17, 18, 19, 20, 21, 22, 23];
 
 export const lerp = (start, end) => pos => {
