@@ -14,9 +14,6 @@ const ANIMATION_DURATION = 0.25;
 const useAnimation = (puzzle, chain, marbles, renderer) => {
   const { chainRight, chainSymmetric, updateChainOrientation } = chain;
 
-  const operationQueue = [];
-  let processingQueue = false;
-
   const curMappings = () => {
     return chainSymmetric.value ? OperationMappings.Symmetric : OperationMappings.Asymmetric;
   }
@@ -36,19 +33,6 @@ const useAnimation = (puzzle, chain, marbles, renderer) => {
       case Operations.INVERSE_OUTER_SHIFT:
         return inverseOuterShift();
     }
-  }
-
-  const processQueue = async () => {
-    if (operationQueue.length == 0) {
-      processingQueue = false;
-      return;
-    }
-
-    const op = operationQueue.shift();
-
-    await animateOperation(op, ANIMATION_DURATION);
-    transform(op);
-    processQueue();
   }
 
   const mapMarbles = mapping => {
@@ -118,7 +102,7 @@ const useAnimation = (puzzle, chain, marbles, renderer) => {
     }
   }
 
-  const animateOperation = async (op, duration = 0.5) => {
+  const animateOperation = async (op, duration = ANIMATION_DURATION) => {
     const clock = new THREE.Clock();
     clock.start();
 
@@ -133,6 +117,8 @@ const useAnimation = (puzzle, chain, marbles, renderer) => {
     if (op == Operations.ROTATE || op == Operations.INVERSE_ROTATE) {
       chainInterpolation = (chainSymmetric.value ? ChainInterpolations.Symmetric : ChainInterpolations.Asymmetric)[op];
     }
+
+    const animateMarbles = marbles.value.slice(0);
 
     animationPromise = new Promise(res => {
       animateFunc = () => {
@@ -149,7 +135,7 @@ const useAnimation = (puzzle, chain, marbles, renderer) => {
         interpolations.forEach((interpolation, i) => {
           if (!interpolation) return;
 
-          marbles.value[i].position.copy(interpolation(pos));
+          animateMarbles[i].position.copy(interpolation(pos));
         });
 
         if (chainInterpolation) {
@@ -175,18 +161,11 @@ const useAnimation = (puzzle, chain, marbles, renderer) => {
 
   // a somewhat hacky alternative to constantly registering and unregistering new render handlers
   renderer.onAnimate(() => animateFunc());
-
-  puzzle.value.onTransform(op => {
-    operationQueue.push(op);
-
-    if (!processingQueue) {
-      processingQueue = true;
-      processQueue();
-    }
-  });
-
+  
   return {
-    cancelAnimation
+    cancelAnimation,
+    animateOperation,
+    transform
   }
 }
 

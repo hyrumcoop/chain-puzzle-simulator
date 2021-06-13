@@ -1,11 +1,15 @@
 <template>
   <div class='d-flex flex-column'>
-    <div ref='viewport' class='flex-grow-1'>
-      <puzzle-code-box :code='puzzleCode' />
+    <div ref='viewport' class='flex-grow-1 position-relative'>
+      <div class='overlay position-absolute top-0 bottom-0 w-100 h-100'>
+        <puzzle-code-box :code='puzzleCode' />
+
+        <playback-bar
+          :operations='playbackQueue'
+        />
+      </div>
     </div>
     
-    <playback-bar :operations='[3, 3, 0, 3, 4, 3, 4, 1, 5, 3, 3, 2, 5, 2, 1, 2, 1, 2, 2, 0]' />
-
     <viewport-controls
       @scramble='scramble'
       @reset='reset'
@@ -27,6 +31,7 @@ import useChain from '@/composables/useChain';
 import useMarbles from '@/composables/useMarbles';
 import useAnimation from '@/composables/useAnimation';
 import useKeyboard from '@/composables/useKeyboard';
+import usePlayback from '@/composables/usePlayback';
 
 import ChainPuzzle from '@/modules/ChainPuzzle';
 
@@ -49,8 +54,9 @@ export default {
     const chain = useChain(renderer.scene, puzzle);
     const marbles = useMarbles(renderer.scene, puzzle);
     const animation = useAnimation(puzzle, chain, marbles.marbles, renderer);
+    const playback = usePlayback(puzzle, animation);
 
-    useKeyboard(puzzle);
+    useKeyboard(playback);
     
     return {
       puzzle,
@@ -61,7 +67,8 @@ export default {
       ...lighting,
       ...chain,
       ...marbles,
-      ...animation
+      ...animation,
+      ...playback
     };
   },
   mounted() {

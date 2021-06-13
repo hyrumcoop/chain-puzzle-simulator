@@ -11,11 +11,11 @@ const KeyOperations = {
   's': Operations.INVERSE_ROTATE
 }
 
-const useKeyboard = (puzzle) => {
+const useKeyboard = (playback) => {
   onMounted(() => {
     window.addEventListener('keypress', event => {
       const key = event.key.toLowerCase();
-      if (key in KeyOperations) puzzle.value.transform(KeyOperations[key]);
+      if (key in KeyOperations) playback.pushOperation(KeyOperations[key]);
     })
   });
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class='playback-bar d-flex flex-row'>
+  <div class='playback-bar d-flex flex-row'  v-if='operations.length > 0'>
     <operation-icon v-for='(op, i) in operations' :op='op' :key='i' />
   </div>
 </template>
@@ -21,6 +21,10 @@ export default {
 <style scoped>
 
 .playback-bar {
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+
   padding: 8px 16px;
 
   background-color:#f4f4f4;

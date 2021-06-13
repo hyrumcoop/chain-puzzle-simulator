@@ -62,6 +62,8 @@ export default {
   border-left: 1px solid #eee;
   border-bottom: 1px solid #eee;
   border-bottom-left-radius: 6px;
+
+  z-index: 2;
 }
 
 .puzzleCode a {
