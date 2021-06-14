@@ -13,6 +13,9 @@
       </div>
 
       <div class='col d-flex justify-content-end align-items-center'>
+        <div class='flex-grow-1 text-center'>
+          <span class='fw-bold'>{{currentIndex}}</span><span class='text-secondary'> / {{operations.length}} moves</span>
+        </div>
         <button class='btn btn-outline-dark' @click='$emit("cancel")'>Cancel</button>
       </div>
     </div>
@@ -32,7 +35,9 @@ export default {
   name: 'ViewportControls',
   props: {
     showPlaybackControls: Boolean,
-    playing: Boolean
+    playing: Boolean,
+    operations: Array,
+    currentIndex: Number
   }
 }
 </script>

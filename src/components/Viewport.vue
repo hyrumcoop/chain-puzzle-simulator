@@ -14,6 +14,8 @@
     <viewport-controls
       :showPlaybackControls='showPlaybackControls'
       :playing='playing'
+      :operations='playbackQueue'
+      :currentIndex='playbackQueueIndex'
 
       @scramble='scramble'
       @reset='reset'
