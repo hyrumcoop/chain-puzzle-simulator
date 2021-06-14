@@ -12,14 +12,25 @@
     </div>
     
     <viewport-controls
+      :showPlaybackControls='showPlaybackControls'
+      :playing='playing'
+
       @scramble='scramble'
       @reset='reset'
+
+      @play='play()'
+      @pause='pause()'
+      @cancel='stop()'
+      @next='next()'
+      @prev='prev()'
     />
   </div>
 </template>
 
 <script>
 import { ref, shallowRef } from 'vue';
+
+import { PlaybackMode } from '@/constants';
 
 import PuzzleCodeBox from './PuzzleCodeBox';
 import ViewportControls from './ViewportControls';
@@ -83,6 +94,11 @@ export default {
     },
     reset() {
       this.puzzle.reset()
+    }
+  },
+  computed: {
+    showPlaybackControls() {
+      return this.playbackMode == PlaybackMode.DEMONSTRATION // TODO: BAD, USE ENUM
     }
   }
 }

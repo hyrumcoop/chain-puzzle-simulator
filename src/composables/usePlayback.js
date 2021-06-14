@@ -1,22 +1,17 @@
 import { ref } from 'vue';
 
-import { InverseOperations } from '@/constants';
-
-const PlaybackMode = {
-  FREE: 0, // user is in control
-  DEMONSTRATION: 1, // simulator is in control
-}
+import { InverseOperations, PlaybackMode } from '@/constants';
 
 const usePlayback = (puzzle, animation) => {
-  let playbackQueue = ref([]);
-  let playbackQueueIndex = ref(0);
-  let playbackMode = ref(PlaybackMode.FREE);
-  let playing = false;
+  const playbackQueue = ref([]);
+  const playbackQueueIndex = ref(0);
+  const playbackMode = ref(PlaybackMode.FREE);
+  const playing = ref(false);
 
   // enters an out-of-sequence input, such as a user input
   const pushOperation = async op => {
     if (playbackMode.value == PlaybackMode.DEMONSTRATION) {
-      if (playing) {
+      if (playing.value) {
         return await pause(); // pause playback but ignore move
       } else {
         await stop(); // stop playback and perform move
@@ -41,12 +36,12 @@ const usePlayback = (puzzle, animation) => {
   }
 
   const play = () => {
-    if (playbackMode.value == PlaybackMode.FREE || playing) return;
+    if (playbackMode.value == PlaybackMode.FREE || playing.value) return;
 
-    playing = true;
+    playing.value = true;
 
     const recursivePlay = async () => {
-      if (!playing) return;
+      if (!playing.value) return;
       if (playbackQueueIndex.value >= playbackQueue.value.length) return pause();
 
       await internalNext();
@@ -57,12 +52,12 @@ const usePlayback = (puzzle, animation) => {
   }
 
   const pause = async () => {
-    playing = false;
+    playing.value = false;
     await animation.cancelAnimation();
   }
 
   const togglePlay = async () => {
-    if (playing) {
+    if (playing.value) {
       await pause()
     } else {
       await play()
@@ -72,7 +67,7 @@ const usePlayback = (puzzle, animation) => {
   const stop = async () => {
     playbackMode.value = PlaybackMode.FREE;
     playbackQueue.value = [];
-    playing = false;
+    playing.value = false;
 
     await animation.cancelAnimation();
   }
@@ -94,13 +89,13 @@ const usePlayback = (puzzle, animation) => {
 
   // safe to call from outside
   const next = async () => {
-    if (playing) return;
+    if (playing.value) return;
     await internalNext();
   }
 
   const prev = async () => {
     if (playbackMode.value == PlaybackMode.FREE || playbackQueueIndex.value <= 0) return;
-    if (playing) return await pause();
+    if (playing.value) return await pause();
     
     const op = InverseOperations[playbackQueue.value[--playbackQueueIndex.value]];
     puzzle.value.transform(op);
@@ -117,6 +112,7 @@ const usePlayback = (puzzle, animation) => {
     playbackQueue,
     playbackQueueIndex,
     playbackMode,
+    playing,
 
     pushOperation,
     setPlaybackSequence: setSequence,

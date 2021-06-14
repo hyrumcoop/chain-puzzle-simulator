@@ -84,3 +84,8 @@ export const ASYMMETRIC_MARBLE_POSITIONS = [
   new THREE.Vector3(-1.4611, 1.2296, 0),
   new THREE.Vector3(-0.5, 1.36, 0),
 ]
+
+export const PlaybackMode = {
+  FREE: 0, // user is in control
+  DEMONSTRATION: 1, // simulator is in control
+}
