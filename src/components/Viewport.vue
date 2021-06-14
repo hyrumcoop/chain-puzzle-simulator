@@ -16,6 +16,7 @@
       :playing='playing'
       :operations='playbackQueue'
       :currentIndex='playbackQueueIndex'
+      :speed='speed'
 
       @scramble='scramble'
       @reset='reset'
@@ -25,6 +26,8 @@
       @cancel='stop()'
       @next='next()'
       @prev='prev()'
+
+      @updateSpeed='setSpeed'
     />
   </div>
 </template>

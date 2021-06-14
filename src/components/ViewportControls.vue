@@ -1,7 +1,9 @@
 <template>
   <div class='bottom-bar container-fluid'>
     <div class='row align-items-center h-100'  v-if='showPlaybackControls'>
-      <div class='col'></div>
+      <div class='col d-flex justify-content-end'>
+        <input type='range' class='form-range w-25' @change='updateSpeed' :value='sliderValue'>
+      </div>
 
       <div class='col col-auto fs-1'>
         <a href='#' class='text-reset me-4' @click='$emit("skip-start")'><i class='bi-skip-start-fill'></i></a>
@@ -31,13 +33,31 @@
 </template>
 
 <script>
+const MIN_SPEED = 1;
+const MAX_SPEED = 0.1;
+
 export default {
   name: 'ViewportControls',
   props: {
     showPlaybackControls: Boolean,
     playing: Boolean,
     operations: Array,
-    currentIndex: Number
+    currentIndex: Number,
+    speed: Number
+  },
+  methods: {
+    updateSpeed(event) {
+      const val = parseInt(event.target.value);
+      const speed = ((100 - val) / 100) * (MIN_SPEED - MAX_SPEED) + MAX_SPEED;
+
+      this.$emit('updateSpeed', speed);
+    }
+  },
+  computed: {
+    sliderValue() {
+      const val = 100 - ((this.speed - MAX_SPEED) / (MIN_SPEED - MAX_SPEED) * 100);
+      return val;
+    }
   }
 }
 </script>

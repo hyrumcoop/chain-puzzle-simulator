@@ -2,11 +2,14 @@ import { ref } from 'vue';
 
 import { InverseOperations, PlaybackMode } from '@/constants';
 
+const DEFAULT_SPEED = 0.25;
+
 const usePlayback = (puzzle, animation) => {
   const playbackQueue = ref([]);
   const playbackQueueIndex = ref(0);
   const playbackMode = ref(PlaybackMode.FREE);
   const playing = ref(false);
+  const speed = ref(DEFAULT_SPEED);
 
   // enters an out-of-sequence input, such as a user input
   const pushOperation = async op => {
@@ -21,7 +24,7 @@ const usePlayback = (puzzle, animation) => {
     puzzle.value.transform(op);
     
     await animation.cancelAnimation();
-    animation.animateOperation(op);
+    animation.animateOperation(op, speed.value);
     animation.transform(op);
   }
 
@@ -81,7 +84,7 @@ const usePlayback = (puzzle, animation) => {
 
     await animation.cancelAnimation();
       
-    const promise = animation.animateOperation(op);
+    const promise = animation.animateOperation(op, speed.value);
     animation.transform(op);
 
     await promise;
@@ -102,10 +105,14 @@ const usePlayback = (puzzle, animation) => {
 
     await animation.cancelAnimation();
 
-    const promise = animation.animateOperation(op);
+    const promise = animation.animateOperation(op, speed.value);
     animation.transform(op);
 
     await promise;
+  }
+
+  const setSpeed = newSpeed => {
+    speed.value = newSpeed;
   }
 
   return {
@@ -113,6 +120,7 @@ const usePlayback = (puzzle, animation) => {
     playbackQueueIndex,
     playbackMode,
     playing,
+    speed,
 
     pushOperation,
     setPlaybackSequence: setSequence,
@@ -122,7 +130,9 @@ const usePlayback = (puzzle, animation) => {
     togglePlay,
     stop,
     next,
-    prev
+    prev,
+
+    setSpeed
   }
 }
 
