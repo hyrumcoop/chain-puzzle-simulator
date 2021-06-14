@@ -42,7 +42,7 @@ export default {
         return `${barWidth - operationsWidth - X_PADDING * 2 + ICON_SPACING}px`;
       }
 
-      return `${barWidth/2 - currentIndexPos + X_PADDING}px`;
+      return `${barWidth/2 - currentIndexPos}px`;
     }
   },
   computed: {
