@@ -20,6 +20,7 @@
 
       @scramble='scramble'
       @reset='reset'
+      @solve='solve'
 
       @play='play()'
       @pause='pause()'
@@ -52,6 +53,8 @@ import usePlayback from '@/composables/usePlayback';
 
 import ChainPuzzle from '@/modules/ChainPuzzle';
 import OperationSequence from '@/modules/OperationSequence';
+
+import PuzzleSolver from '@/modules/PuzzleSolver';
 
 export default {
   components: {
@@ -99,6 +102,9 @@ export default {
     },
     reset() {
       this.puzzle.reset()
+    },
+    solve() {
+      this.setPlaybackSequence(PuzzleSolver.solve(this.puzzle, 60));
     }
   },
   computed: {

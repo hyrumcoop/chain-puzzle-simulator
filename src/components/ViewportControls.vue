@@ -25,7 +25,7 @@
     <div class='row align-items-center h-100' v-else>
       <div class='bar d-flex justify-content-center py-3'>
         <button type='button' class='btn btn-outline-dark' @click='$emit("scramble")'>Scramble</button>
-        <button type='button' class='btn btn-outline-primary mx-2'>Solve</button>
+        <button type='button' class='btn btn-outline-primary mx-2' @click='$emit("solve")'>Solve</button>
         <button type='button' class='btn btn-outline-dark' @click='$emit("reset")'>Reset</button>
       </div>
     </div>

@@ -82,7 +82,7 @@ ChainPuzzle.prototype.normalize = function() {
   for (let i = 0; i < 30; i++) {
     const cur = this.marbles[i];
 
-    if (!mapping[cur]) {
+    if (mapping[cur] == null) {
       mapping[cur] = index++;
     }
 
