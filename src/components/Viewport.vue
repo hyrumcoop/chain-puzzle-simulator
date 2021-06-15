@@ -20,7 +20,6 @@
 
       @scramble='scramble'
       @reset='reset'
-      @solve='solve'
 
       @play='play()'
       @pause='pause()'
@@ -29,6 +28,11 @@
       @prev='prev()'
 
       @updateSpeed='setSpeed'
+
+      :solving='isSolving'
+      :bestSolution='bestSolution'
+      @find-solutions='findSolutions()'
+      @choose-solution='chooseSolution()'
     />
   </div>
 </template>
@@ -65,6 +69,9 @@ export default {
   setup() {
     const puzzle = shallowRef(new ChainPuzzle());
     const puzzleCode = ref(puzzle.value.encode());
+    const isSolving = ref(false);
+    const bestSolution = ref(null);
+    const stopSolvingFunc = shallowRef(null);
 
     puzzle.value.onTransform(() => puzzleCode.value = puzzle.value.encode());
     puzzle.value.onReset(() => puzzleCode.value = puzzle.value.encode());
@@ -82,6 +89,9 @@ export default {
     return {
       puzzle,
       puzzleCode,
+      isSolving,
+      bestSolution,
+      stopSolvingFunc,
 
       ...renderer,
       ...cameraControls,
@@ -103,13 +113,23 @@ export default {
     reset() {
       this.puzzle.reset()
     },
-    solve() {
-      this.setPlaybackSequence(PuzzleSolver.solve(this.puzzle, 60));
+    async findSolutions() {
+      this.isSolving = true;
+
+      this.stopSolvingFunc = PuzzleSolver.generateSolutions(this.puzzle, solution => {
+        this.bestSolution = solution;
+      });
+    },
+    async chooseSolution() {
+      this.bestSolution = await this.stopSolvingFunc();
+      await this.setPlaybackSequence(this.bestSolution); // TODO: error checking
+      this.isSolving = false;
+      this.bestSolution = null;
     }
   },
   computed: {
     showPlaybackControls() {
-      return this.playbackMode == PlaybackMode.DEMONSTRATION // TODO: BAD, USE ENUM
+      return this.playbackMode == PlaybackMode.DEMONSTRATION
     }
   }
 }

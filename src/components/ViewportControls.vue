@@ -25,8 +25,17 @@
     <div class='row align-items-center h-100' v-else>
       <div class='bar d-flex justify-content-center py-3'>
         <button type='button' class='btn btn-outline-dark' @click='$emit("scramble")'>Scramble</button>
-        <button type='button' class='btn btn-outline-primary mx-2' @click='$emit("solve")'>Solve</button>
         <button type='button' class='btn btn-outline-dark' @click='$emit("reset")'>Reset</button>
+
+        <div v-if='!solving'>
+          <button type='button' class='btn btn-outline-primary mx-2' @click='$emit("find-solutions")'>Solve</button>
+        </div>
+
+        <div v-else>
+          <button type='button' class='btn btn-outline-primary mx-2' @click='$emit("choose-solution")'>Choose Solution</button>
+          <span v-if='bestSolution'>{{ bestSolution.length }} steps</span>
+          <span v-else>Finding solutions...</span>
+        </div>
       </div>
     </div>
   </div>
@@ -43,7 +52,10 @@ export default {
     playing: Boolean,
     operations: Array,
     currentIndex: Number,
-    speed: Number
+    speed: Number,
+
+    solving: Boolean,
+    bestSolution: Array
   },
   methods: {
     updateSpeed(event) {
