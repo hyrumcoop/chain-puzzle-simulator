@@ -120,7 +120,6 @@ const PuzzleSolver = {
   
         if (puzzle.isSolved()) {
           const solution = getPathOperations(cur);
-          console.log('Found solution!', solution);
           onSolution(solution);
           bestSolution = solution;
   
