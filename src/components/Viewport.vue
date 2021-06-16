@@ -8,6 +8,8 @@
           :operations='playbackQueue'
           :currentIndex='playbackQueueIndex - 1'
         />
+
+        <controls-guide />
       </div>
     </div>
     
@@ -53,6 +55,7 @@ import { PlaybackMode } from '@/constants';
 import PuzzleCodeBox from './PuzzleCodeBox';
 import ViewportControls from './ViewportControls';
 import PlaybackBar from './PlaybackBar';
+import ControlsGuide from './ControlsGuide';
 
 import useRenderer from '@/composables/useRenderer';
 import useCameraControls from '@/composables/useCameraControls';
@@ -73,7 +76,8 @@ export default {
   components: {
     ViewportControls,
     PuzzleCodeBox,
-    PlaybackBar
+    PlaybackBar,
+    ControlsGuide
   },
   setup() {
     const puzzle = shallowRef(new ChainPuzzle());
