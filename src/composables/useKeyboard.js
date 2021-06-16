@@ -11,11 +11,25 @@ const KeyOperations = {
   's': Operations.INVERSE_ROTATE
 }
 
-const useKeyboard = (playback) => {
+const KeyMarbleInputs = {
+  'Digit1': 0,
+  'Digit2': 1,
+  'Digit3': 2,
+  'Digit4': 3,
+  'Digit5': 4,
+  'Digit6': 5
+}
+
+const useKeyboard = (playback, marbleInputter) => {
   onMounted(() => {
     window.addEventListener('keypress', event => {
-      const key = event.key.toLowerCase();
-      if (key in KeyOperations) playback.pushOperation(KeyOperations[key]);
+      if (marbleInputter.isInputting.value) {
+        const code = event.code;
+        if (code in KeyMarbleInputs) return marbleInputter.inputMarble(KeyMarbleInputs[code]);
+      } else {
+        const key = event.key.toLowerCase();
+        if (key in KeyOperations) return playback.pushOperation(KeyOperations[key]);
+      }
     });
 
     window.addEventListener('keydown', event => {

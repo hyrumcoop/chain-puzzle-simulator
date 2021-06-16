@@ -39,6 +39,19 @@
       </div>
 
       <div class='col'>
+        <button class='btn btn-outline-dark' type='button' @click='$emit("begin-marble-input")' v-if='!inputting'>Input Marbles</button>
+        <button class='btn btn-outline-dark' type='button' @click='$emit("cancel-marble-input")' v-else>Cancel Input</button>
+
+        <div class='btn-group' role='group' aria-label='Symmetric toggle' v-if='inputting'>
+          <input type='radio' name='input-symmetric' class='btn-check' id='input-symmetric' autocomplete='off' @click='$emit("update-input-symmetric", true)' :checked='inputSymmetric'>
+          <label class='btn btn-outline-dark' for='input-symmetric'>Symmetric</label>
+
+          <input type='radio' name='input-symmetric' class='btn-check' id='input-asymmetric' autocomplete='off' @click='$emit("update-input-symmetric", false)' :checked='!inputSymmetric'>
+          <label class='btn btn-outline-dark' for='input-asymmetric'>Asymmetric</label>
+        </div>
+      </div>
+
+      <div class='col'>
         <div class='input-group'>
           <button class='btn btn-outline-dark' type='button' @click='loadPuzzleCode()' id='load-code-button'>Load Puzzle</button>
           <input type='text' v-model='puzzleCode' class='form-control' placeholder='Puzzle Code' aria-label='Puzzle Code' aria-describedby='load-code-button'>
@@ -62,7 +75,10 @@ export default {
     speed: Number,
 
     solving: Boolean,
-    bestSolution: Array
+    bestSolution: Array,
+
+    inputting: Boolean,
+    inputSymmetric: Boolean
   },
   data() {
     return {

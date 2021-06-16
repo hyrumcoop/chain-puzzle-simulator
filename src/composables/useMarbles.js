@@ -7,6 +7,9 @@ import {
   ASYMMETRIC_MARBLE_POSITIONS
 } from '@/constants';
 
+const MARKER_MARBLE_COLOR = 0xffffff;
+const MARKER_MARBLE_OPACITY = 0.6;
+
 const useMarbles = (scene, puzzle) => {
   const geometry = new THREE.SphereGeometry(0.5, 32, 32);
   const materials = [];
@@ -16,6 +19,13 @@ const useMarbles = (scene, puzzle) => {
   }
 
   const marbles = shallowRef([]);
+  const markerMarble = shallowRef(null);
+
+  const markerMaterial = new THREE.MeshStandardMaterial({color: MARKER_MARBLE_COLOR});
+  markerMaterial.transparent = true;
+  markerMaterial.opacity = MARKER_MARBLE_OPACITY;
+
+  markerMarble.value = new THREE.Mesh(geometry, markerMaterial);
 
   const setMarbleOrientation = (symmetric, order) => {
     const positions = symmetric ? SYMMETRIC_MARBLE_POSITIONS : ASYMMETRIC_MARBLE_POSITIONS;
@@ -35,6 +45,20 @@ const useMarbles = (scene, puzzle) => {
     });
   }
 
+  const clearMarbles = () => {
+    marbles.value.forEach(marble => {
+      scene.value.remove(marble);
+    });
+  }
+
+  const setMarkerVisibility = isVisible => {
+    if (isVisible) {
+      scene.value.add(markerMarble.value);
+    } else {
+      scene.value.remove(markerMarble.value);
+    }
+  }
+
   const initMarbles = () => {
     setMarbleOrientation(puzzle.value.symmetric, puzzle.value.marbles);
   }
@@ -44,9 +68,12 @@ const useMarbles = (scene, puzzle) => {
 
   return {
     marbles,
+    markerMarble,
 
     initMarbles,
-    setMarbleOrientation
+    setMarbleOrientation,
+    clearMarbles,
+    setMarkerVisibility
   }
 }
 

@@ -35,6 +35,12 @@
       @choose-solution='chooseSolution()'
 
       @load-puzzle-code='loadPuzzleCode($event)'
+
+      :inputting='isInputting'
+      :inputSymmetric='inputSymmetric'
+      @begin-marble-input='beginMarbleInput()'
+      @cancel-marble-input='cancelMarbleInput()'
+      @update-input-symmetric='updateInputSymmetric($event)'
     />
   </div>
 </template>
@@ -56,6 +62,7 @@ import useMarbles from '@/composables/useMarbles';
 import useAnimation from '@/composables/useAnimation';
 import useKeyboard from '@/composables/useKeyboard';
 import usePlayback from '@/composables/usePlayback';
+import useMarbleInputter from '@/composables/useMarbleInputter';
 
 import ChainPuzzle from '@/modules/ChainPuzzle';
 import OperationSequence from '@/modules/OperationSequence';
@@ -75,6 +82,8 @@ export default {
     const bestSolution = ref(null);
     const stopSolvingFunc = shallowRef(null);
 
+    const loadPuzzleCode = code => puzzle.value.loadPuzzleCode(code);
+
     puzzle.value.onTransform(() => puzzleCode.value = puzzle.value.encode());
     puzzle.value.onReset(() => puzzleCode.value = puzzle.value.encode());
 
@@ -85,8 +94,9 @@ export default {
     const marbles = useMarbles(renderer.scene, puzzle);
     const animation = useAnimation(puzzle, chain, marbles.marbles, renderer);
     const playback = usePlayback(puzzle, animation);
+    const marbleInputter = useMarbleInputter(marbles, chain, puzzle, loadPuzzleCode);
 
-    useKeyboard(playback);
+    useKeyboard(playback, marbleInputter);
     
     return {
       puzzle,
@@ -94,6 +104,7 @@ export default {
       isSolving,
       bestSolution,
       stopSolvingFunc,
+      loadPuzzleCode,
 
       ...renderer,
       ...cameraControls,
@@ -101,7 +112,8 @@ export default {
       ...chain,
       ...marbles,
       ...animation,
-      ...playback
+      ...playback,
+      ...marbleInputter
     };
   },
   mounted() {
@@ -127,9 +139,6 @@ export default {
       await this.setPlaybackSequence(this.bestSolution); // TODO: error checking
       this.isSolving = false;
       this.bestSolution = null;
-    },
-    loadPuzzleCode(code) {
-      this.puzzle.loadPuzzleCode(code);
     }
   },
   computed: {
