@@ -157,13 +157,20 @@ ChainPuzzle.prototype.inverseOuterShift = function() {
   return this.transform(Operations.INVERSE_OUTER_SHIFT);
 }
 
-ChainPuzzle.prototype.reset = function() {
-  this.symmetric = false;
-  this.marbles = DEFAULT_MARBLES.slice(0);
+ChainPuzzle.prototype.reset = function(symmetric = false, marbles = DEFAULT_MARBLES.slice(0)) {
+  this.symmetric = symmetric;
+  this.marbles = marbles;
 
   this.fireEvent('reset', []);
 
   return this;
+}
+
+ChainPuzzle.prototype.loadPuzzleCode = function(code) {
+  // TODO: validation
+
+  const newPuzzle = ChainPuzzle.decode(code);
+  return this.reset(newPuzzle.symmetric, newPuzzle.marbles);
 }
 
 ChainPuzzle.prototype.fireEvent = async function(event, params) {

@@ -33,6 +33,8 @@
       :bestSolution='bestSolution'
       @find-solutions='findSolutions()'
       @choose-solution='chooseSolution()'
+
+      @load-puzzle-code='loadPuzzleCode($event)'
     />
   </div>
 </template>
@@ -125,6 +127,9 @@ export default {
       await this.setPlaybackSequence(this.bestSolution); // TODO: error checking
       this.isSolving = false;
       this.bestSolution = null;
+    },
+    loadPuzzleCode(code) {
+      this.puzzle.loadPuzzleCode(code);
     }
   },
   computed: {

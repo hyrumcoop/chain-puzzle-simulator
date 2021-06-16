@@ -23,7 +23,7 @@
     </div>
 
     <div class='row align-items-center h-100' v-else>
-      <div class='bar d-flex justify-content-center py-3'>
+      <div class='col d-flex justify-content-center py-3'>
         <button type='button' class='btn btn-outline-dark' @click='$emit("scramble")'>Scramble</button>
         <button type='button' class='btn btn-outline-dark' @click='$emit("reset")'>Reset</button>
 
@@ -35,6 +35,13 @@
           <button type='button' class='btn btn-outline-primary mx-2' @click='$emit("choose-solution")'>Choose Solution</button>
           <span v-if='bestSolution'>{{ bestSolution.length }} steps</span>
           <span v-else>Finding solutions...</span>
+        </div>
+      </div>
+
+      <div class='col'>
+        <div class='input-group'>
+          <button class='btn btn-outline-dark' type='button' @click='loadPuzzleCode()' id='load-code-button'>Load Puzzle</button>
+          <input type='text' v-model='puzzleCode' class='form-control' placeholder='Puzzle Code' aria-label='Puzzle Code' aria-describedby='load-code-button'>
         </div>
       </div>
     </div>
@@ -57,12 +64,20 @@ export default {
     solving: Boolean,
     bestSolution: Array
   },
+  data() {
+    return {
+      puzzleCode: ''
+    }
+  },
   methods: {
     updateSpeed(event) {
       const val = parseInt(event.target.value);
       const speed = ((100 - val) / 100) * (MIN_SPEED - MAX_SPEED) + MAX_SPEED;
 
       this.$emit('updateSpeed', speed);
+    },
+    loadPuzzleCode() {
+      this.$emit('load-puzzle-code', this.puzzleCode);
     }
   },
   computed: {
