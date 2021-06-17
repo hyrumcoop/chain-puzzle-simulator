@@ -2,6 +2,7 @@ import Heap from 'heap';
 
 import ChainPuzzle from './ChainPuzzle';
 import Heuristic from './Heuristic';
+import OperationSequence from './OperationSequence';
 
 function Node(position, parent, operation, priority, depth) {
   this.position = position;
@@ -119,7 +120,8 @@ const PuzzleSolver = {
         const puzzle = ChainPuzzle.decode(cur.position);
   
         if (puzzle.isSolved()) {
-          const solution = getPathOperations(cur);
+          const solution = OperationSequence.reorder(getPathOperations(cur));
+
           onSolution(solution);
           bestSolution = solution;
   
