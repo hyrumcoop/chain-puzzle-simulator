@@ -1,5 +1,5 @@
 <template>
-  <span class='puzzleCode font-monospace'>
+  <span class='puzzleCode font-monospace' :class='{solved}'>
     <a href='#' @click='copy()'><i class='bi-clipboard'></i></a>
     <span>{{ code }}</span>
   </span>
@@ -22,7 +22,8 @@ import { Toast } from 'bootstrap';
 
 export default {
   props: {
-    code: String
+    code: String,
+    solved: Boolean
   },
   data() {
     return {
@@ -64,6 +65,11 @@ export default {
   border-bottom-left-radius: 6px;
 
   z-index: 2;
+}
+
+.puzzleCode.solved {
+  background-color: #c8e6c9;
+  border-color: #a5d6a7;
 }
 
 .puzzleCode a {

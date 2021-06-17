@@ -2,7 +2,7 @@
   <div class='d-flex flex-column'>
     <div ref='viewport' class='flex-grow-1 position-relative'>
       <div class='overlay position-absolute top-0 bottom-0 w-100 h-100'>
-        <puzzle-code-box :code='puzzleCode' />
+        <puzzle-code-box :code='puzzleCode' :solved='isSolved' />
 
         <playback-bar
           :operations='playbackQueue'
@@ -84,14 +84,23 @@ export default {
   setup() {
     const puzzle = shallowRef(new ChainPuzzle());
     const puzzleCode = ref(puzzle.value.encode());
+    const isSolved = ref(puzzle.value.isSolved());
+
     const isSolving = ref(false);
     const bestSolution = ref(null);
     const stopSolvingFunc = shallowRef(null);
 
     const loadPuzzleCode = code => puzzle.value.loadPuzzleCode(code);
 
-    puzzle.value.onTransform(() => puzzleCode.value = puzzle.value.encode());
-    puzzle.value.onReset(() => puzzleCode.value = puzzle.value.encode());
+    puzzle.value.onTransform(() => {
+      puzzleCode.value = puzzle.value.encode();
+      isSolved.value = puzzle.value.isSolved();
+    });
+
+    puzzle.value.onReset(() => {
+      puzzleCode.value = puzzle.value.encode();
+      isSolved.value = puzzle.value.isSolved();
+    });
 
     const renderer = useRenderer();
     const cameraControls = useCameraControls(renderer.camera, renderer.viewport, renderer.onAnimate);
@@ -107,6 +116,7 @@ export default {
     return {
       puzzle,
       puzzleCode,
+      isSolved,
       isSolving,
       bestSolution,
       stopSolvingFunc,
