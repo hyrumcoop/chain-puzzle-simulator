@@ -5,12 +5,12 @@ import { Operations, InverseOperations, OperationMappings } from './operations';
 export { Operations, InverseOperations, OperationMappings };
 
 export const MARBLE_COLORS = [
-  0xff0000,
-  0xffff00,
-  0x00ff00,
-  0x0000ff,
-  0xff00ff,
-  0xff69b4
+  0xf44336,
+  0xffeb3b,
+  0x4caf50,
+  0x2196f3,
+  0x9c27b0,
+  0xe91e63
 ]
 
 export const SYMMETRIC_MARBLE_POSITIONS = [

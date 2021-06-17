@@ -9,7 +9,9 @@
           :currentIndex='playbackQueueIndex - 1'
         />
 
-        <controls-guide />
+        <controls-guide
+          controlsType='input-marbles'
+        />
       </div>
     </div>
     

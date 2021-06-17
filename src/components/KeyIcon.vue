@@ -1,21 +1,42 @@
 <template>
-  <div class='key-icon d-flex justify-content-center align-items-center fw-bold'>{{ char }}</div>
+  <div class='key-icon d-flex justify-content-center align-items-center fw-bold' :style='colorStyle'>{{ char }}</div>
 </template>
 
 <script>
 import { Tooltip } from 'bootstrap';
+import chroma from 'chroma-js';
 
 export default {
   name: 'KeyIcon',
   props: {
     char: String,
-    tooltip: String
+    tooltip: String,
+    color: String
   },
   mounted() {
-    new Tooltip(this.$el, {
-      title: this.tooltip
-    });
+    if (this.tooltip) {
+      new Tooltip(this.$el, {
+        title: this.tooltip
+      });
+    }
+   
   },
+  computed: {
+    colorStyle() {
+      if (!this.color) return {};
+
+      const style = {};
+
+      if (chroma(this.color).luminance() < 0.179) {
+        style.color = '#fff';
+      }
+
+      style.backgroundColor = this.color;
+      style.borderColor = chroma(this.color).darken().css();
+
+      return style;
+    }
+  }
 }
 
 </script>
@@ -33,12 +54,13 @@ export default {
   border-bottom: 3px solid #ddd;
 
   cursor: pointer;
-  transition: background-color 0.2s ease, border-color 0.2s ease;
+  transition: filter 0.2s ease;
 }
 
 .key-icon:hover {
   background-color: #ddd;
   border-color: #ccc;
+  filter: brightness(90%);
 }
 
 </style>
