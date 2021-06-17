@@ -5,7 +5,8 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 const useChain = (scene, puzzle) => {
   const loader = new GLTFLoader();
-  const material = new THREE.MeshStandardMaterial({color: 0x00ff00});
+  const materialLeft = new THREE.MeshLambertMaterial({color: 0xe0e0e0});
+  const materialRight = new THREE.MeshLambertMaterial({color: 0x0d47a1});
 
   const chainLeft = shallowRef(null);
   const chainRight = shallowRef(null);
@@ -19,8 +20,8 @@ const useChain = (scene, puzzle) => {
     const loadedData = await loader.loadAsync('./chain.glb');
     const chainGeometry = loadedData.scene.children[0].geometry;
 
-    chainLeft.value = new THREE.Mesh(chainGeometry, material);
-    chainRight.value = new THREE.Mesh(chainGeometry, material);
+    chainLeft.value = new THREE.Mesh(chainGeometry, materialLeft);
+    chainRight.value = new THREE.Mesh(chainGeometry, materialRight);
 
     chainRight.value.rotation.y = Math.PI;
 

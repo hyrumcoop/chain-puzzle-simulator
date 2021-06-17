@@ -15,13 +15,13 @@ const useMarbles = (scene, puzzle) => {
   const materials = [];
 
   for (let color of MARBLE_COLORS) {
-    materials.push(new THREE.MeshStandardMaterial({color}))
+    materials.push(new THREE.MeshStandardMaterial({color, roughness: 0.05}))
   }
 
   const marbles = shallowRef([]);
   const markerMarble = shallowRef(null);
 
-  const markerMaterial = new THREE.MeshStandardMaterial({color: MARKER_MARBLE_COLOR});
+  const markerMaterial = new THREE.MeshStandardMaterial({color: MARKER_MARBLE_COLOR, roughness: 0.05});
   markerMaterial.transparent = true;
   markerMaterial.opacity = MARKER_MARBLE_OPACITY;
 
