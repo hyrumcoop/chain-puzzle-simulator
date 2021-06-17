@@ -10,7 +10,7 @@
         />
 
         <controls-guide
-          controlsType='input-marbles'
+          :controlsType='controlsType'
         />
       </div>
     </div>
@@ -150,6 +150,12 @@ export default {
   computed: {
     showPlaybackControls() {
       return this.playbackMode == PlaybackMode.DEMONSTRATION
+    },
+    controlsType() {
+      if (this.isInputting) return 'input-marbles';
+      if (this.showPlaybackControls) return 'playback';
+
+      return 'puzzle';
     }
   }
 }

@@ -1,5 +1,11 @@
 <template>
-  <div class='key-icon d-flex justify-content-center align-items-center fw-bold' :style='colorStyle'>{{ char }}</div>
+  <div
+    class='key-icon d-flex justify-content-center align-items-center fw-bold'
+    :style='colorStyle'
+  >
+    <i v-if='icon' :class='icon'></i>
+    <span :class='{spacebar: char == " "}' v-else>{{ displayChar }}</span>
+  </div>
 </template>
 
 <script>
@@ -10,6 +16,7 @@ export default {
   name: 'KeyIcon',
   props: {
     char: String,
+    icon: String,
     tooltip: String,
     color: String
   },
@@ -19,7 +26,6 @@ export default {
         title: this.tooltip
       });
     }
-   
   },
   computed: {
     colorStyle() {
@@ -35,6 +41,15 @@ export default {
       style.borderColor = chroma(this.color).darken().css();
 
       return style;
+    },
+
+    displayChar() {
+      switch(this.char) {
+        case ' ':
+          return ']';
+        default:
+          return this.char;
+      }
     }
   }
 }
@@ -61,6 +76,15 @@ export default {
   background-color: #ddd;
   border-color: #ccc;
   filter: brightness(90%);
+}
+
+.spacebar {
+  position: relative;
+  top: 2px;
+  left: 1px;
+
+  writing-mode: vertical-lr;
+  text-orientation: mixed;
 }
 
 </style>

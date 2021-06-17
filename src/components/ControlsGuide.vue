@@ -1,6 +1,6 @@
 <template>
-  <div class='controls-guide'>
-    <h5 class='title'>Controls</h5>
+  <div class='controls-guide' :class='{playback: showPlaybackControls}'>
+    <h5 class='title'>{{ title }}</h5>
 
     <div class='puzzle-controls' v-if='showPuzzleControls'>
       <div class='key-desc'>
@@ -43,6 +43,23 @@
         </div>
       </div>
     </div>
+
+    <div class='playback-controls' v-if='showPlaybackControls'>
+      <div class='key-desc'>
+        <key-icon icon='bi-caret-left-fill' tooltip='Arrow Left' />
+        <small>Step back</small>
+      </div>
+
+      <div class='key-desc'>
+        <key-icon icon='bi-caret-right-fill' tooltip='Arrow Right' />
+        <small>Step forward</small>
+      </div>
+
+      <div class='key-desc'>
+        <key-icon char=' ' tooltip='Spacebar' />
+        <small>Toggle playback</small>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -64,11 +81,22 @@ export default {
     keyColors() {
       return MARBLE_COLORS.map(col => chroma(col).css());
     },
+    title() {
+      switch(this.controlsType) {
+        case 'puzzle': return 'Puzzle Controls';
+        case 'input-marbles': return 'Input Controls';
+        case 'playback': return 'Playback Controls';
+        default: return 'Controls';
+      }
+    },
     showPuzzleControls() {
       return this.controlsType == 'puzzle'
     },
     showInputMarbleControls() {
       return this.controlsType == 'input-marbles'
+    },
+    showPlaybackControls() {
+      return this.controlsType == 'playback';
     }
   }
 }
@@ -89,6 +117,10 @@ export default {
   border-top: 1px solid #eee;
   border-left: 1px solid #eee;
   border-top-left-radius: 4px;
+}
+
+.controls-guide.playback {
+  bottom: 57px; /* this must change if the playback bar height changes */
 }
 
 .controls-guide .title {
