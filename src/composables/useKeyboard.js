@@ -20,11 +20,16 @@ const KeyMarbleInputs = {
   'Digit6': 5
 }
 
-const useKeyboard = (playback, marbleInputter) => {
+const useKeyboard = (playback, marbleInputter, chain) => {
   onMounted(() => {
     window.addEventListener('keypress', event => {
+      const {code} = event;
+
+      if (code == 'KeyT') {
+        return chain.toggleChainTransparent();
+      }
+
       if (marbleInputter.isInputting.value) {
-        const code = event.code;
         if (code in KeyMarbleInputs) return marbleInputter.inputMarble(KeyMarbleInputs[code]);
       } else {
         const key = event.key.toLowerCase();

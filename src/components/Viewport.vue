@@ -111,7 +111,7 @@ export default {
     const playback = usePlayback(puzzle, animation);
     const marbleInputter = useMarbleInputter(marbles, chain, puzzle, loadPuzzleCode);
 
-    useKeyboard(playback, marbleInputter);
+    useKeyboard(playback, marbleInputter, chain);
     
     return {
       puzzle,
