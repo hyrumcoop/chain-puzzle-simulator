@@ -98,6 +98,9 @@ export default {
     });
 
     puzzle.value.onReset(() => {
+      marbleInputter.isInputting.value = false;
+      marbles.setMarkerVisibility(false);
+
       puzzleCode.value = puzzle.value.encode();
       isSolved.value = puzzle.value.isSolved();
     });
