@@ -18,7 +18,11 @@
         <div class='flex-grow-1 text-center'>
           <span class='fw-bold'>{{currentIndex}}</span><span class='text-secondary'> / {{operations.length}} moves</span>
         </div>
-        <button class='btn btn-outline-dark' @click='$emit("cancel")'>Cancel</button>
+
+        <button type='button' class='icon-button btn btn-outline-dark' @click='$emit("cancel")'>
+          <i class='bi-x fs-5' />
+          <span>Cancel</span>
+        </button>
       </div>
     </div>
 
