@@ -3,6 +3,9 @@ import { onMounted, shallowRef } from 'vue';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
+const MAX_ZOOM_DISTANCE = 20;
+const MIN_ZOOM_DISTANCE = 5;
+
 const useCameraControls = (camera, viewport, onAnimate) => {
   const controls = shallowRef(null);
 
@@ -13,6 +16,8 @@ const useCameraControls = (camera, viewport, onAnimate) => {
 
     camera.value.lookAt(new THREE.Vector3(0, 0, 0));
     controls.value = new OrbitControls(camera.value, viewport.value);
+    controls.value.maxDistance = MAX_ZOOM_DISTANCE;
+    controls.value.minDistance = MIN_ZOOM_DISTANCE;
   }
 
   onAnimate(() => {
