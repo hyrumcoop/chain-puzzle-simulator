@@ -4,10 +4,29 @@
 
     <div class='icon-buttons fs-3'>
       <a href='#' class='text-reset mx-2'><i class='bi-github'></i></a>
-      <a href='#' class='text-reset'><i class='bi-question-circle-fill'></i></a>
+      <a href='#' class='text-reset' @click='openInfo()'><i class='bi-question-circle-fill'></i></a>
     </div>
   </div>
+
+  <info-modal ref='infoModal' />
 </template>
+
+<script>
+import InfoModal from './InfoModal';
+
+export default {
+  name: 'Navbar',
+  components: {
+    InfoModal
+  },
+  methods: {
+    openInfo() {
+      this.$refs.infoModal.toggle()
+    }
+  }
+}
+</script>
+
 
 <style scoped>
 
