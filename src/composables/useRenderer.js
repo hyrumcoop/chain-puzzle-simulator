@@ -19,7 +19,7 @@ const useRenderer = () => {
     scene.value = new THREE.Scene();
     camera.value = new THREE.PerspectiveCamera(FOV, width / height, 0.1, 1000);
 
-    renderer.value = new THREE.WebGLRenderer();
+    renderer.value = new THREE.WebGLRenderer({antialias: true});
     renderer.value.setSize(width, height);
     renderer.value.setClearColor(0xffffff, 1);
     viewport.value.appendChild(renderer.value.domElement);
