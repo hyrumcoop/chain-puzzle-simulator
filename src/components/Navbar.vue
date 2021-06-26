@@ -1,6 +1,6 @@
 <template>
   <div class='bar d-flex align-items-center px-3'>
-    <h2 class='title m-0 flex-grow-1'>Astrolabicon</h2>
+    <h2 class='title m-0 flex-grow-1'>Chain Puzzle</h2>
 
     <div class='icon-buttons fs-3'>
       <a href='#' class='text-reset mx-2'><i class='bi-github'></i></a>

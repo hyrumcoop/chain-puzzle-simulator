@@ -1,4 +1,4 @@
-# astrolabicon-simulator
+# chain-puzzle-simulator
 
 ## Project setup
 ```
