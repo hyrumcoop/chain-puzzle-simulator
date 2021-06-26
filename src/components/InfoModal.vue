@@ -12,7 +12,21 @@
             :show='selectedQuestion == 0'
             @select='selectQuestion(0)'
           >
-            It's awesome!
+            <p>
+              The <a href='https://www.myminifactory.com/users/makeanything' target='_blank'>Chain Puzzle</a>
+              is a puzzle designed by <a href='https://www.devinmontes.com/' target='_blank'>Devin Montes</a>
+              and can be purchased at his <a href='https://www.myminifactory.com/users/makeanything' target='_blank'>
+              store</a> or can be 3D printed using the models on
+              <a href='https://www.myminifactory.com/object/3d-print-the-chain-puzzle-razor-118798' target='_blank'>
+              MyMiniFactory</a>. The puzzle consists of two inter-looping tracks which hold 30 marbles that mix up
+              when you twist the halves into alternating positions. In a “symmetric” position, there is
+              a large 18 marble track looping around a smaller 12 marble track, while in the
+              “asymmetric” position there are two 15 marble tracks locked together. Rotate the two halves
+              of the puzzle and shift the marbles along their tracks until all like colors touch.
+            </p>
+
+            <p>This simulator was developed independently by <a href='https://github.com/hyrumcoop' target='_blank'>
+            Hyrum Cooper</a> who can be reached at <a href='mailto:hyrumcoop@gmail.com'>hyrumcoop@gmail.com.</a></p>
           </faq-question>
 
           <faq-question
