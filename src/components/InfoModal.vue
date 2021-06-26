@@ -1,6 +1,6 @@
 <template>
   <div class='modal fade' tabindex='-1'>
-    <div class='modal-dialog'>
+    <div class='modal-dialog modal-lg'>
       <div class='modal-content'>
         <div class='modal-header'>
           <h5 class='modal-title'>Info</h5>
@@ -30,27 +30,44 @@
           </faq-question>
 
           <faq-question
-            question='Where can I buy one?'
+            question='How does the simulator work?'
             :show='selectedQuestion == 1'
             @select='selectQuestion(1)'
           >
-            Online!
-          </faq-question>
+            <p>
+              The simulator uses a heuristic-guided graph traversal algorithm known as the
+              <a href='https://en.wikipedia.org/wiki/A*_search_algorithm' target='_blank'>A* search
+              algorithm</a> to solve the puzzle. It begins at a node representing the starting puzzle
+              state and expands it by creating a new node for each puzzle state that is one
+              transformation away from the parent node. The algorithm then uses a heuristic to judge
+              the favorability of each new puzzle state, chooses the most favorable node from the graph,
+              and continues the process of expanding until it reaches a solved state.
+            </p>
 
-          <faq-question
-            question='How does the simulator work?'
-            :show='selectedQuestion == 2'
-            @select='selectQuestion(2)'
-          >
-            It's magic!
-          </faq-question>
+            <p>
+              The heuristic used by the simulator assesses the number of contiguous groups of color in
+              the puzzle. A puzzle state with a lower score is a more favorable state than one with a
+              higher score. For example, when the puzzle is solved, there are 6 groups of contiguous
+              color (1 for each color), the highest score the heuristic can give. When each marble in the
+              chain is different from the ones next to it (seemingly very scrambled), there are 30
+              contiguous groups, one for each marble. The intuition driving the heuristic is that the
+              puzzle seems to be closer to being solved when the number of contiguous groups are low,
+              and that it seems to be far away from being solved when this number is large. A brief
+              statistical analysis has shown that this correlation does exist, but it’s not perfect and
+              the heuristic will often overestimate or underestimate.
+            </p>
 
-          <faq-question
-            question='How can I contribute?'
-            :show='selectedQuestion == 3'
-            @select='selectQuestion(3)'
-          >
-            Github!
+            <p>
+              Because the heuristic often overestimates the favorability of certain chain states, the
+              algorithm rarely finds the most efficient solution on its first pass. To improve the
+              efficiency of the solutions generated, the algorithm is capped at a certain depth (a depth
+              of 100 nodes was picked arbitrarily for the first pass) and run iteratively. When a solution
+              is found, the algorithm repeats, this time with a depth capped lower than the solution below
+              it. While this approach works, there is no way to guarantee that the algorithm has reached
+              the best solution. A better solution would be to design a “consistent heuristic”, a heuristic
+              never overestimates the favorability of a position. Achieving this would likely require a
+              deeper mathematical analysis of the chain puzzle.
+            </p>
           </faq-question>
         </div>
       </div>
