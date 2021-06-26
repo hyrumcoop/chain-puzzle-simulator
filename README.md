@@ -2,7 +2,7 @@
 
 The [Chain Puzzle](https://www.devinmontes.com/store/the-chain-puzzle) is a puzzle designed by [Devin Montes](https://www.devinmontes.com/) and can be purchased at his store or can be 3D printed using the models on [MyMiniFactory](https://www.myminifactory.com/object/3d-print-the-chain-puzzle-razor-118798). This simulator was developed independently by Hyrum Cooper. [Click here to try the demo!](https://hyrumcoop.github.io/chain-puzzle-simulator)
 
-[![Chain Puzzle Simulator Screenshot](https://github.com/hyrumcoop/chain-puzzle-simulator/blob/master/public/images/screenshot.png?raw=true)](https://hyrumcoop.github.io/chain-puzzle-simulator)
+[![Chain Puzzle Simulator Screenshot](https://raw.githubusercontent.com/hyrumcoop/chain-puzzle-simulator/master/public/screenshot.png)](https://hyrumcoop.github.io/chain-puzzle-simulator)
 
 ## What is this?
 
