@@ -3,7 +3,7 @@
     <h2 class='title m-0 flex-grow-1'>Chain Puzzle</h2>
 
     <div class='icon-buttons fs-3'>
-      <a href='#' class='text-reset mx-2'><i class='bi-github'></i></a>
+      <a href='https://hyrumcoop.github.io/chain-puzzle-simulator' target='_blank' class='text-reset mx-2'><i class='bi-github'></i></a>
       <a href='#' class='text-reset' @click='openInfo()'><i class='bi-question-circle-fill'></i></a>
     </div>
   </div>
