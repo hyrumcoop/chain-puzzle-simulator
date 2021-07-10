@@ -10,7 +10,7 @@ export const MARBLE_COLORS = [
   0x4caf50,
   0x2196f3,
   0x9c27b0,
-  0xe91e63
+  0xff69b4
 ]
 
 export const SYMMETRIC_MARBLE_POSITIONS = [
