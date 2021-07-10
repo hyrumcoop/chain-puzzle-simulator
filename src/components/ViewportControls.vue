@@ -89,7 +89,7 @@
           <span>Scramble</span>
         </button>
 
-        <button type='button' class='icon-button btn btn-outline-success ms-2' @click='$emit("find-solutions")'>
+        <button type='button' class='icon-button btn btn-success ms-2' @click='$emit("find-solutions")'>
           <i class='bi-lightbulb fs-5' />
           <span>Solve</span>
         </button>
